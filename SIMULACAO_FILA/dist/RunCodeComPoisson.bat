@@ -1,0 +1,1 @@
+java -jar "SIMULACAO_FILA.jar"

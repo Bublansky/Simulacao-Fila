@@ -18,9 +18,15 @@ public class MAIN
     
     public static void main(String[] args)
     {
+        boolean RandomValues;
         Fila fila = new Fila();
-        Produtor p = new Produtor(1, fila, 5, false);
-        Consumidor c = new Consumidor(1, fila, 2, false);
+        
+            //System.out.println("Iniciado com valores totalmente aleatórios");
+            RandomValues = false;
+            System.out.println("Iniciado com entrada Poisson e saída exponencial");
+        
+        Produtor p = new Produtor(1, fila, 5, RandomValues);
+        Consumidor c = new Consumidor(1, fila, 2, RandomValues);
         p.start();
         c.start();
     }
