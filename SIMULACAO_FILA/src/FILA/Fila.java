@@ -16,7 +16,7 @@ public class Fila
 { 
     private List fila;
     private int conteudo;
-    private boolean disponivel = true;
+    private boolean locked = false;
  
     public Fila()
     {
@@ -24,46 +24,26 @@ public class Fila
     }
     public void set(int valor)
     {
-        if(disponivel)
-        {
-            disponivel = false;
+        
+            locked = true;
             fila.add(valor);
-            System.out.println("Produziu " + valor);
-            disponivel = true;
-        }
-        else
-        {
-            while (!disponivel)
-            {
-            }
-            disponivel = false;
-            fila.add(valor);
-            System.out.println("Produziu " + valor);
-            disponivel = true;
-        }
+            System.out.println("Produziu " + valor);    
+            locked = false;
+       
     }
- 
     public int get()
     {
-        if(disponivel)
-        {
-            disponivel = false;
-            conteudo = Integer.parseInt(fila.remove(0).toString()); 
-            System.out.println("Consumiu: " + conteudo);
-            disponivel = true;
-            return conteudo;
-        }
-        else
-        {
-            while (!disponivel)
+       
+            locked = true;
+            if(getSize() <= 0)
             {
+                return -1;
             }
-            disponivel = false;
             conteudo = Integer.parseInt(fila.remove(0).toString()); 
             System.out.println("Consumiu: " + conteudo);
-            disponivel = true;
+            locked = false;
             return conteudo;
-        }
+        
     }
     public int getSize()
     {

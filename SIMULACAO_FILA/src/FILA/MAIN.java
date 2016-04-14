@@ -5,18 +5,22 @@
  */
 package FILA;
 
+import java.util.Date;
+import java.util.Random;
+
 /**
  *
  * @author Ludus
  */
 public class MAIN
 {
+    
+    
     public static void main(String[] args)
     {
         Fila fila = new Fila();
-        Produtor p = new Produtor(1, fila, 5);
-        Consumidor c = new Consumidor(1, fila, 2);
-  
+        Produtor p = new Produtor(1, fila, 5, false);
+        Consumidor c = new Consumidor(1, fila, 2, false);
         p.start();
         c.start();
     }
