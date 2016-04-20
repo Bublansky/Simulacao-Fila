@@ -5,8 +5,19 @@
  */
 package FILA;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 /**
  *
  * @author Ludus
@@ -45,47 +56,59 @@ public class Consumidor extends Thread
         y = 0.526
     */
     @Override
+    @SuppressWarnings("empty-statement")
     public void run()
     {
-        System.out.println("Consumidor iniciado!");
-        long lastTimeArrival, lastTimeExit, now;
-        int multiplier = 1;
-        int maxArrival = 5;
-        int rngArrival;
-        double ySaida = 0.526;
-        int indice = 1;
-        now = new Date().getTime();
-        tempoAnterior = now;
-        while(true)
-        {
+        try {
+            System.out.println("Consumidor iniciado!");
+            long lastTimeArrival, lastTimeExit, now;
+            int multiplier = 1;
+            int maxArrival = 5;
+            int rngArrival;
+            double ySaida = 0.526;
+            int indice = 1;
             now = new Date().getTime();
-            if(tempoAnterior + multiplier * intervalo <= now)
-            {       
-                timePassed += 1;
-                //System.out.println(timePassed);
-                tempoAnterior = now;
-                rngArrival = rng.nextInt(maxArrival + 1);
-                rngResult = rng.nextDouble();
-                //rngArrival = 2;
-                if(isFullRandom)
+            tempoAnterior = now;
+            OutputStream file;
+            file = new FileOutputStream("grafic.png");
+            JFreeChart grafic;
+            while(true)
+            {
+                now = new Date().getTime();
+                if(tempoAnterior + multiplier * intervalo <= now)
                 {
-                    if(rngResult < ySaida)
+                    
+                    timePassed += 1;
+                    
+                    //System.out.println(timePassed);
+                    tempoAnterior = now;
+                    rngArrival = rng.nextInt(maxArrival + 1);
+                    rngResult = rng.nextDouble();
+                    //rngArrival = 2;
+                    if(isFullRandom)
+                    {
+                        if(rngResult < ySaida)
+                        {
+                            for(int i = 0 ; i < rngArrival ; i++)
+                            {
+                                //System.out.println("set");
+                                fila.get();
+                            }
+                        }
+                    }
+                    if(rngResult <= Exponential(ySaida * multiplier, rngArrival))
                     {
                         for(int i = 0 ; i < rngArrival ; i++)
                         {
-                            //System.out.println("set");
                             fila.get();
                         }   
                     }
                 }
-                if(rngResult <= Exponential(ySaida * multiplier, rngArrival))
-                {
-                    for(int i = 0 ; i < rngArrival ; i++)
-                    {
-                        fila.get();
-                    }
-                }
+                
+                
             }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Consumidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     private double Exponential(double y, double x)
